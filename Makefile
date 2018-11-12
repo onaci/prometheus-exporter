@@ -10,3 +10,7 @@ run:
 
 build:
 	docker build -t $(IMAGE) .
+
+modules:
+	go mod tidy
+	go mod download
