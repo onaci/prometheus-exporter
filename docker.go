@@ -36,7 +36,7 @@ type DockerCollectorGathererCollector struct {
 var (
 	dockerSwarmNodesDesc = prometheus.NewDesc(
 		"Docker_swarm_nodes",
-		"Number Docker Swarm nodes.",
+		"Number of Docker Swarm nodes.",
 		[]string{
 			"host",
 			"role",
