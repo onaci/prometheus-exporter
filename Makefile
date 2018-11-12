@@ -1,5 +1,5 @@
 
-IMAGE="$(REGISTRY)/onaci/prometheus-exporter:master"
+IMAGE="onaci/prometheus-exporter:latest"
 
 run:
 	docker run \
