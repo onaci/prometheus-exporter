@@ -40,6 +40,9 @@ var (
 			"role",
 			"availability",
 			"state",
+			"version",
+			"reachability",
+			"leader",
 		}, nil,
 	)
 )
@@ -67,6 +70,14 @@ func (cc DockerCollectorGathererCollector) Collect(ch chan<- prometheus.Metric) 
 		panic(err)
 	}
 	for _, node := range nodes {
+		leader := "false"
+		reachable := "worker"
+		if node.ManagerStatus != nil {
+			if node.ManagerStatus.Leader {
+				leader = "true"
+			}
+			reachable = string(node.ManagerStatus.Reachability)
+		}
 		ch <- prometheus.MustNewConstMetric(
 			dockerSwarmNodesDesc,
 			prometheus.GaugeValue,
@@ -75,6 +86,9 @@ func (cc DockerCollectorGathererCollector) Collect(ch chan<- prometheus.Metric) 
 			string(node.Spec.Role),
 			string(node.Spec.Availability),
 			string(node.Status.State),
+			node.Description.Engine.EngineVersion,
+			reachable,
+			leader,
 		)
 	}
 }
