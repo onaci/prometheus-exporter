@@ -23,7 +23,9 @@ func init() {
 	//NewDockerCollectorGatherer("db", reg)
 	NewDockerCollectorGatherer("ca", reg)
 
-	http.Handle("/metrics/docker", promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
+	endpoint := "/metrics/docker"
+	fmt.Printf("Listening on %s\n", endpoint)
+	http.Handle(endpoint, promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
 }
 
 // DockerCollectorGathererCollector implements the Collector interface.
@@ -60,7 +62,6 @@ func (cc DockerCollectorGathererCollector) Describe(ch chan<- *prometheus.Desc) 
 // Note that Collect could be called concurrently, so we depend on
 // ReallyExpensiveAssessmentOfTheSystemState to be concurrency-safe.
 func (cc DockerCollectorGathererCollector) Collect(ch chan<- prometheus.Metric) {
-	fmt.Println("get docker info")
 	cli, err := client.NewEnvClient()
 	if err != nil {
 		panic(err)

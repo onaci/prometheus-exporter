@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -33,6 +34,8 @@ func main() {
 	cpuTemp.Set(65.3)
 	hdFailures.Inc()
 
-	http.Handle("/metrics", prometheus.Handler())
+	endpoint := "/metrics"
+	fmt.Printf("Listening on %s\n", endpoint)
+	http.Handle(endpoint, prometheus.Handler())
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }
