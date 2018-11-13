@@ -13,17 +13,17 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+var name = "docker"
+
 func init() {
 	// Since we are dealing with custom Collector implementations, it might
 	// be a good idea to try it out with a pedantic registry.
 	reg := prometheus.NewPedanticRegistry()
 
-	// Construct cluster managers. In real code, we would assign them to
-	// variables to then do something with them.
-	//NewDockerCollectorGatherer("db", reg)
-	NewDockerCollectorGatherer("ca", reg)
+	// Construct cluster managers.
+	NewDockerCollectorGatherer(name, reg)
 
-	endpoint := "/metrics/docker"
+	endpoint := "/metrics/" + name
 	fmt.Printf("Listening on %s\n", endpoint)
 	http.Handle(endpoint, promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
 }
@@ -101,5 +101,5 @@ func (cc DockerCollectorGathererCollector) Collect(ch chan<- prometheus.Metric) 
 // collected by different DockerCollectorGathererCollectors do not collide.
 func NewDockerCollectorGatherer(zone string, reg prometheus.Registerer) {
 	cc := DockerCollectorGathererCollector{}
-	prometheus.WrapRegistererWith(prometheus.Labels{"docker": "host"}, reg).MustRegister(cc)
+	prometheus.WrapRegistererWith(prometheus.Labels{"type": "docker"}, reg).MustRegister(cc)
 }
