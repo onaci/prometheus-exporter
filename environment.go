@@ -1,25 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
 	"os"
 	"strings"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
-
-func init() {
-	reg := prometheus.NewPedanticRegistry()
-
-	NewEnvCollectorGatherer(name, reg)
-
-	name := "environment"
-	endpoint := "/metrics/" + name
-	fmt.Printf("Listening on %s\n", endpoint)
-	http.Handle(endpoint, promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
-}
 
 // EnvCollectorGathererCollector implements the Collector interface.
 type EnvCollectorGathererCollector struct {

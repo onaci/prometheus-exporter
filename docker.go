@@ -2,31 +2,15 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"net/http"
 
 	"github.com/docker/docker/api/types"
 	//"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/client"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var name = "docker"
-
-func init() {
-	// Since we are dealing with custom Collector implementations, it might
-	// be a good idea to try it out with a pedantic registry.
-	reg := prometheus.NewPedanticRegistry()
-
-	// Construct cluster managers.
-	NewDockerCollectorGatherer(name, reg)
-
-	endpoint := "/metrics/" + name
-	fmt.Printf("Listening on %s\n", endpoint)
-	http.Handle(endpoint, promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
-}
 
 // DockerCollectorGathererCollector implements the Collector interface.
 type DockerCollectorGathererCollector struct {
